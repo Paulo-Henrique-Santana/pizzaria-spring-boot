@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pizzaria - Novo pedido</title>
+  </head>
+  <body>
+    <a th:if="${#lists.size(pedido.itensPedido)}" th:href="@{/finalizarPedido}"
+      >Finalizar pedido</a
+    >
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Descrição</th>
+          <th>Valor</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr th:each="pizza: ${pizzas}">
+          <td th:text="${pizza.nome}"></td>
+          <td th:text="${pizza.descricao}"></td>
+          <td
+            th:text="'R$' + ' ' + ${#numbers.formatDecimal(pizza.valor,1,'POINT',2,'COMMA')}"
+          ></td>
+          <td>
+            <a
+              th:href="@{/selecionaProduto(codigo=${pizza.codigo}, tipoProduto='pizza')}"
+              >Selecionar</a
+            >
+          </td>
+        </tr>
+
+        <tr th:each="bebida: ${bebidas}">
+          <td th:text="${bebida.nome}"></td>
+          <td th:text="${bebida.descricao}"></td>
+          <td
+            th:text="'R$' + ' ' + ${#numbers.formatDecimal(bebida.valor,1,'POINT',2,'COMMA')}"
+          ></td>
+          <td>
+            <a
+              th:href="@{/selecionaProduto(codigo=${bebida.codigo}, tipoProduto='bebida')}"
+              >Selecionar</a
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div th:if="${produtoSelecionado}" style="margin-top: 25px">
+      <table>
+        <caption>
+          Produto selecionado
+        </caption>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td th:text="${produtoSelecionado.nome}"></td>
+            <td th:text="${produtoSelecionado.descricao}"></td>
+            <td
+              th:text="'R$' + ' ' + ${#numbers.formatDecimal(produtoSelecionado.valor,1,'POINT',2,'COMMA')}"
+            ></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <form
+        method="POST"
+        th:object="${itemPedido}"
+        th:action="@{/incluirNoPedido}"
+      >
+        <div th:if="${tipoProduto == 'pizza'}">
+          <label for="tamanhos">Tamanho</label>
+
+          <select th:field="*{tamanho}" id="tamanhos">
+            <option value="Pequena">Pequena</option>
+            <option value="Média">Média</option>
+            <option value="Grande">Grande</option>
+          </select>
+        </div>
+
+        <div th:if="${tipoProduto == 'bebida'}">
+          <label for="tamanhos">Tamanho</label>
+
+          <select th:field="*{tamanho}" id="tamanhos">
+            <option value="250ml">250ml</option>
+            <option value="500ml">500ml</option>
+            <option value="1L">1L</option>
+            <option value="2L">2L</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="quantidade">Quantidade</label>
+          <input
+            th:field="*{quantidade}"
+            type="number"
+            min="1"
+            th:onchange="'calculateValue()'"
+          />
+        </div>
+
+        <div>
+          <span>Valor total: R$ </span>
+          <input
+            style="border: none; outline: none"
+            type="text"
+            th:field="${produtoSelecionado.valor}"
+            readonly
+          />
+        </div>
+
+        <button>Incluir no pedido</button>
+      </form>
+    </div>
+
+    <script th:inline="javascript">
+      const pValorTotal = document.querySelector("#valor");
+      const valorTotal = pValorTotal.value;
+
+      function calculateValue() {
+        const quantidade = document.querySelector("#quantidade").value;
+
+        pValorTotal.value = `${(
+          Number(valorTotal) * Number(quantidade)
+        ).toFixed(2)}`;
+      }
+
+      calculateValue();
+    </script>
+  </body>
+</html>
