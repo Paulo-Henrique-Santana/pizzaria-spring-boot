@@ -22,11 +22,11 @@ import lombok.Setter;
 public class Cliente {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  int cpf;
+  long cpf;
   String email;
   String nome;
   String enderecoEntrega;
-  int telefone;
+  long telefone;
 
   @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
   private List<Pedido> pedidos = new ArrayList<>();

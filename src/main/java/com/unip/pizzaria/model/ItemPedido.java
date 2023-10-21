@@ -28,7 +28,11 @@ public class ItemPedido {
   @JoinColumn(name = "numero_pedido")
   private Pedido pedido;
 
-  // @ManyToOne(fetch = FetchType.LAZY)
-  // @JoinColumn(name = "codigo_produto")
-  // private Produto produto;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "codigo_pizza")
+  private Pizza pizza;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "codigo_bebida")
+  private Bebida bebida;
 }
