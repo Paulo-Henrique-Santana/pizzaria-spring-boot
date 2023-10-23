@@ -1,14 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org"
+  lang="pt-br"
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pizzaria - Novo pedido</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <title>Pizzaria</title>
   </head>
   <body>
-    <a th:if="${#lists.size(pedido.itensPedido)}" th:href="@{/finalizarPedido}"
-      >Finalizar pedido</a
-    >
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/listarProdutos}">Novo pedido</a>
+        </li>
+        <li
+          class="nav-item"
+          th:if="${pedido != null && #lists.size(pedido.itensPedido) > 0}"
+        >
+          <a class="nav-link" th:href="@{/confirmarPedido}">Finalizar pedido</a>
+        </li>
+      </ul>
+    </nav>
 
     <table>
       <thead>
@@ -21,29 +41,14 @@
       </thead>
 
       <tbody>
-        <tr th:each="pizza: ${pizzas}">
-          <td th:text="${pizza.nome}"></td>
-          <td th:text="${pizza.descricao}"></td>
+        <tr th:each="produto: ${produtos}">
+          <td th:text="${produto.nome}"></td>
+          <td th:text="${produto.descricao}"></td>
           <td
-            th:text="'R$' + ' ' + ${#numbers.formatDecimal(pizza.valor,1,'POINT',2,'COMMA')}"
+            th:text="'R$' + ' ' + ${#numbers.formatDecimal(produto.valor,1,'POINT',2,'COMMA')}"
           ></td>
           <td>
-            <a
-              th:href="@{/selecionaProduto(codigo=${pizza.codigo}, tipoProduto='pizza')}"
-              >Selecionar</a
-            >
-          </td>
-        </tr>
-
-        <tr th:each="bebida: ${bebidas}">
-          <td th:text="${bebida.nome}"></td>
-          <td th:text="${bebida.descricao}"></td>
-          <td
-            th:text="'R$' + ' ' + ${#numbers.formatDecimal(bebida.valor,1,'POINT',2,'COMMA')}"
-          ></td>
-          <td>
-            <a
-              th:href="@{/selecionaProduto(codigo=${bebida.codigo}, tipoProduto='bebida')}"
+            <a th:href="@{/selecionaProduto(codigo=${produto.codigo})}"
               >Selecionar</a
             >
           </td>
@@ -78,8 +83,9 @@
         method="POST"
         th:object="${itemPedido}"
         th:action="@{/incluirNoPedido}"
+        style="margin-top: 25px"
       >
-        <div th:if="${tipoProduto == 'pizza'}">
+        <div th:if="${produtoSelecionado.tipo == 'pizza'}">
           <label for="tamanhos">Tamanho</label>
 
           <select th:field="*{tamanho}" id="tamanhos">
@@ -89,7 +95,7 @@
           </select>
         </div>
 
-        <div th:if="${tipoProduto == 'bebida'}">
+        <div th:if="${produtoSelecionado.tipo == 'bebida'}">
           <label for="tamanhos">Tamanho</label>
 
           <select th:field="*{tamanho}" id="tamanhos">
@@ -107,6 +113,7 @@
             type="number"
             min="1"
             th:onchange="'calculateValue()'"
+            required
           />
         </div>
 

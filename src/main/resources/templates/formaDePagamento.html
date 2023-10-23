@@ -21,7 +21,26 @@
         <li class="nav-item">
           <a class="nav-link" th:href="@{/listarProdutos}">Novo pedido</a>
         </li>
+        <li
+          class="nav-item"
+          th:if="${pedido != null && #lists.size(pedido.itensPedido) > 0}"
+        >
+          <a class="nav-link" th:href="@{/confirmarPedido}">Finalizar pedido</a>
+        </li>
       </ul>
     </nav>
+
+    <h1>Selecionar forma de pagamento</h1>
+
+    <form method="POST" th:object="${pedido}" th:action="@{/registrarPedido}">
+      <select th:field="*{pagamento}">
+        <option value="pix">PIX</option>
+        <option value="debito">Débito</option>
+        <option value="credito">Crédito</option>
+        <option value="dinheiro">Dinheiro</option>
+      </select>
+
+      <button>Finalizar</button>
+    </form>
   </body>
 </html>

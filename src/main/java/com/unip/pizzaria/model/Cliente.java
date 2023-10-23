@@ -22,6 +22,7 @@ import lombok.Setter;
 public class Cliente {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  int codigo;
   long cpf;
   String email;
   String nome;

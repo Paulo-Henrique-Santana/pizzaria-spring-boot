@@ -21,7 +21,25 @@
         <li class="nav-item">
           <a class="nav-link" th:href="@{/listarProdutos}">Novo pedido</a>
         </li>
+        <li
+          class="nav-item"
+          th:if="${pedido != null && #lists.size(pedido.itensPedido) > 0}"
+        >
+          <a class="nav-link" th:href="@{/confirmarPedido}">Finalizar pedido</a>
+        </li>
       </ul>
     </nav>
+
+    <h1>Confirme seus dados</h1>
+
+    <p><span>Nome: </span><span th:text="${cliente.nome}"></span></p>
+    <p><span>Telefone: </span><span th:text="${cliente.telefone}"></span></p>
+    <p>
+      <span>Endereço de entrega: </span>
+      <span th:text="${cliente.enderecoEntrega}"></span>
+    </p>
+
+    <a th:href="@{/alterarEndereco}"><button>Alterar endereço</button></a>
+    <a th:href="@{/formaDePagamento}"><button>Prosseguir</button></a>
   </body>
 </html>

@@ -24,15 +24,11 @@ public class ItemPedido {
   int quantidade;
   String tamanho;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "numero_pedido")
+  @ManyToOne
+  @JoinColumn(name = "numero_pedido", nullable = false)
   private Pedido pedido;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "codigo_pizza")
-  private Pizza pizza;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "codigo_bebida")
-  private Bebida bebida;
+  @JoinColumn(name = "codigo_produto")
+  private Produto produto;
 }

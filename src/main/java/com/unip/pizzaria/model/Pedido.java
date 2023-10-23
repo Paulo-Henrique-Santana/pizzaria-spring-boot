@@ -33,13 +33,14 @@ public class Pedido {
   private String pagamento;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "cpf_cliente")
+  @JoinColumn(name = "codigo_cliente")
   private Cliente cliente;
 
   @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
-  private List<ItemPedido> itensPedido = new ArrayList<>();
+  private List<ItemPedido> itensPedido = new ArrayList<ItemPedido>();
 
   public void adicionarItem(ItemPedido itemPedido) {
-    itensPedido.add(itemPedido);
+    getItensPedido().add(itemPedido);
+    itemPedido.setPedido(this);
   }
 }

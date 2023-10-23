@@ -21,7 +21,20 @@
         <li class="nav-item">
           <a class="nav-link" th:href="@{/listarProdutos}">Novo pedido</a>
         </li>
+        <li
+          class="nav-item"
+          th:if="${pedido != null && #lists.size(pedido.itensPedido) > 0}"
+        >
+          <a class="nav-link" th:href="@{/confirmarPedido}">Finalizar pedido</a>
+        </li>
       </ul>
     </nav>
+
+    <h1>Alterar endereco</h1>
+
+    <form method="POST" th:object="${cliente}" th:action="@{/alteraEndereco}">
+      <input th:field="*{enderecoEntrega}" type="text" required />
+      <button>Alterar</button>
+    </form>
   </body>
 </html>

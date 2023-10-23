@@ -21,7 +21,15 @@
         <li class="nav-item">
           <a class="nav-link" th:href="@{/listarProdutos}">Novo pedido</a>
         </li>
+        <li
+          class="nav-item"
+          th:if="${pedido != null && #lists.size(pedido.itensPedido) > 0}"
+        >
+          <a class="nav-link" th:href="@{/confirmarPedido}">Finalizar pedido</a>
+        </li>
       </ul>
     </nav>
+
+    <h1>Pedido registrado com sucesso!</h1>
   </body>
 </html>
