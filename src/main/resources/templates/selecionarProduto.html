@@ -16,10 +16,12 @@
     <title>Pizzaria</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 mb-4">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/listarProdutos}">Novo pedido</a>
+          <a class="nav-link active" th:href="@{/listarProdutos}"
+            >Novo pedido</a
+          >
         </li>
         <li
           class="nav-item"
@@ -30,117 +32,125 @@
       </ul>
     </nav>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Descrição</th>
-          <th>Valor</th>
-          <th>Ação</th>
-        </tr>
-      </thead>
+    <!-- <h1 class="h1 text-center">Produtos</h1> -->
 
-      <tbody>
-        <tr th:each="produto: ${produtos}">
-          <td th:text="${produto.nome}"></td>
-          <td th:text="${produto.descricao}"></td>
-          <td
-            th:text="'R$' + ' ' + ${#numbers.formatDecimal(produto.valor,1,'POINT',2,'COMMA')}"
-          ></td>
-          <td>
-            <a th:href="@{/selecionaProduto(codigo=${produto.codigo})}"
-              >Selecionar</a
-            >
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <div class="card-body">
+        <h1 class="card-title text-center">Produtos</h1>
 
-    <div th:if="${produtoSelecionado}" style="margin-top: 25px">
-      <table>
-        <caption>
-          Produto selecionado
-        </caption>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Descrição</th>
-            <th>Valor</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td th:text="${produtoSelecionado.nome}"></td>
-            <td th:text="${produtoSelecionado.descricao}"></td>
-            <td
-              th:text="'R$' + ' ' + ${#numbers.formatDecimal(produtoSelecionado.valor,1,'POINT',2,'COMMA')}"
-            ></td>
-          </tr>
-        </tbody>
-      </table>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Descrição</th>
+              <th>Valor</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="produto: ${produtos}">
+              <td th:text="${produto.nome}"></td>
+              <td th:text="${produto.descricao}"></td>
+              <td
+                th:text="'R$' + ' ' + ${#numbers.formatDecimal(produto.valor,1,'POINT',2,'COMMA')}"
+              ></td>
+              <td>
+                <a th:href="@{/selecionaProduto(codigo=${produto.codigo})}">
+                  <button class="btn btn-primary">Selecionar</button>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-      <form
-        method="POST"
-        th:object="${itemPedido}"
-        th:action="@{/incluirNoPedido}"
-        style="margin-top: 25px"
-      >
-        <div th:if="${produtoSelecionado.tipo == 'pizza'}">
-          <label for="tamanhos">Tamanho</label>
+    <div class="card" th:if="${produtoSelecionado}" style="margin-top: 25px">
+      <div class="card-body">
+        <h2 class="card-title text-center">Produto selecionado</h2>
 
-          <select th:field="*{tamanho}" id="tamanhos">
-            <option value="Pequena">Pequena</option>
-            <option value="Média">Média</option>
-            <option value="Grande">Grande</option>
-          </select>
-        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Descrição</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td th:text="${produtoSelecionado.nome}"></td>
+              <td th:text="${produtoSelecionado.descricao}"></td>
+              <td
+                th:text="'R$' + ' ' + ${#numbers.formatDecimal(produtoSelecionado.valor,1,'POINT',2,'COMMA')}"
+              ></td>
+            </tr>
+          </tbody>
+        </table>
 
-        <div th:if="${produtoSelecionado.tipo == 'bebida'}">
-          <label for="tamanhos">Tamanho</label>
+        <form
+          method="POST"
+          th:object="${itemPedido}"
+          th:action="@{/incluirNoPedido}"
+          style="margin-top: 25px"
+        >
+          <div class="mb-3" th:if="${produtoSelecionado.tipo == 'pizza'}">
+            <label for="tamanhos">Tamanho</label>
+            <select class="form-control" th:field="*{tamanho}" id="tamanhos">
+              <option value="Pequena">Pequena</option>
+              <option value="Média">Média</option>
+              <option value="Grande">Grande</option>
+            </select>
+          </div>
 
-          <select th:field="*{tamanho}" id="tamanhos">
-            <option value="250ml">250ml</option>
-            <option value="500ml">500ml</option>
-            <option value="1L">1L</option>
-            <option value="2L">2L</option>
-          </select>
-        </div>
+          <div class="mb-3" th:if="${produtoSelecionado.tipo == 'bebida'}">
+            <label for="tamanhos">Tamanho</label>
+            <select class="form-control" th:field="*{tamanho}" id="tamanhos">
+              <option value="250ml">250ml</option>
+              <option value="500ml">500ml</option>
+              <option value="1L">1L</option>
+              <option value="2L">2L</option>
+            </select>
+          </div>
 
-        <div>
-          <label for="quantidade">Quantidade</label>
-          <input
-            th:field="*{quantidade}"
-            type="number"
-            min="1"
-            th:onchange="'calculateValue()'"
-            required
-          />
-        </div>
+          <div class="mb-3">
+            <label for="quantidade">Quantidade</label>
+            <input
+              class="form-control"
+              th:field="*{quantidade}"
+              type="number"
+              min="1"
+              th:onchange="'calculateValue()'"
+              required
+            />
+          </div>
 
-        <div>
-          <span>Valor total: R$ </span>
-          <input
-            style="border: none; outline: none"
-            type="text"
-            th:field="${produtoSelecionado.valor}"
-            readonly
-          />
-        </div>
-
-        <button>Incluir no pedido</button>
-      </form>
+          <div class="mb-3 h5">
+            <span>Valor total:</span>
+            <span
+              id="valor"
+              type="text"
+              th:text="${produtoSelecionado.valor}"
+              readonly
+            ></span>
+          </div>
+          <button class="btn btn-success">Incluir no pedido</button>
+        </form>
+      </div>
     </div>
 
     <script th:inline="javascript">
       const pValorTotal = document.querySelector("#valor");
-      const valorTotal = pValorTotal.value;
+      const valorTotal = pValorTotal.innerText;
 
       function calculateValue() {
         const quantidade = document.querySelector("#quantidade").value;
+        const valorTotalCalculado = Number(valorTotal) * Number(quantidade);
 
-        pValorTotal.value = `${(
-          Number(valorTotal) * Number(quantidade)
-        ).toFixed(2)}`;
+        pValorTotal.innerText = valorTotalCalculado.toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL",
+        });
       }
 
       calculateValue();

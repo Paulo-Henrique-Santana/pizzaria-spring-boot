@@ -16,7 +16,7 @@
     <title>Pizzaria</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" th:href="@{/listarProdutos}">Novo pedido</a>
@@ -30,17 +30,27 @@
       </ul>
     </nav>
 
-    <h1>Selecionar forma de pagamento</h1>
+    <div class="card">
+      <div class="card-body">
+        <h1 class="card-title text-center mb-5">
+          Selecionar forma de pagamento
+        </h1>
 
-    <form method="POST" th:object="${pedido}" th:action="@{/registrarPedido}">
-      <select th:field="*{pagamento}">
-        <option value="pix">PIX</option>
-        <option value="debito">Débito</option>
-        <option value="credito">Crédito</option>
-        <option value="dinheiro">Dinheiro</option>
-      </select>
+        <form
+          method="POST"
+          th:object="${pedido}"
+          th:action="@{/registrarPedido}"
+        >
+          <select class="form-select mb-3" th:field="*{pagamento}">
+            <option value="pix">PIX</option>
+            <option value="debito">Débito</option>
+            <option value="credito">Crédito</option>
+            <option value="dinheiro">Dinheiro</option>
+          </select>
 
-      <button>Finalizar</button>
-    </form>
+          <button class="btn btn-success">Finalizar</button>
+        </form>
+      </div>
+    </div>
   </body>
 </html>
